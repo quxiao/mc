@@ -17,6 +17,9 @@ const (
 	IO_WAIT_IDX
 	IRQ_IDX
 	SOFT_IRQ_IDX
+	STEAL_IDX // since Linux 2.6.11
+	GUEST_IDX // since Linux 2.6.24
+	// GUEST_NICE_IDX // since Linux 2.6.33
 	CPU_FIELD_LEN
 )
 
@@ -28,6 +31,8 @@ type MetricCpu struct {
 	IoWait  uint64
 	Irq     uint64
 	SoftIrq uint64
+	Steal   uint64
+	Guest   uint64
 }
 
 func GetCpuInfo() (cpu MetricCpu, _ error) {
@@ -71,6 +76,14 @@ func GetCpuInfo() (cpu MetricCpu, _ error) {
 			return
 		}
 		cpu.SoftIrq, err = strconv.ParseUint(fields[SOFT_IRQ_IDX], 10, 64)
+		if err != nil {
+			return
+		}
+		cpu.Steal, err = strconv.ParseUint(fields[STEAL_IDX], 10, 64)
+		if err != nil {
+			return
+		}
+		cpu.Guest, err = strconv.ParseUint(fields[GUEST_IDX], 10, 64)
 		if err != nil {
 			return
 		}
