@@ -1,4 +1,4 @@
-package metric
+package mc
 
 import (
 	"bufio"
